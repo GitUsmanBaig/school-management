@@ -55,5 +55,40 @@ const getUsers = async (req, res) => {
     }
 };
 
+//disable Users
+const disableUser = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await User.findById(id);
+        if (user) {
+            user.disabled = true;
+            await user.save();
+            res.status(200).json(`User ${user.name} disabled successfully`);
+        } else {
+            res.status(404).json(`User not found`);
+        }
+    }
+    catch (err) {
+        res.status(500).json(err.message);
+    }
+}
 
-module.exports = { signup, login, logout, getUsers};
+//enable Users
+const enableUser = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await User.findById(id);
+        if (user) {
+            user.disabled = false;
+            await user.save();
+            res.status(200).json(`User ${user.name} enabled successfully`);
+        } else {
+            res.status(404).json(`User not found`);
+        }
+    }
+    catch (err) {
+        res.status(500).json(err.message);
+    }
+}
+
+module.exports = { signup, login, logout, getUsers, disableUser, enableUser};

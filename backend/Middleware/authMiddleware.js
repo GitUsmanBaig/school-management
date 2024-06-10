@@ -5,7 +5,6 @@ const SECRET_KEY = process.env.SECRET_KEY;
 const authenticate_user = (req, res, next) => {
     const token = req.cookies.auth_token;
     if (!token) return res.status(401).send('Access Denied. Please login first.');
-
     try {
         const verified = jwt.verify(token, SECRET_KEY);
         req.user = verified;

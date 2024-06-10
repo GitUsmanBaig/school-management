@@ -1,5 +1,7 @@
 const Admin = require('../Model/Admin');
 const User = require('../Model/User'); 
+const Teacher = require('../Model/Teacher');
+const Course = require('../Model/Course');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 require ('dotenv').config();
@@ -25,7 +27,7 @@ const login = async (req, res) => {
     try {
         const admin = await Admin.findOne ({ email });
         if (admin && await bcrypt.compare(password, admin.password)) {
-            const token = jwt.sign({ id: admin._id, role: admin.role }, SECRET_KEY, { expiresIn: '1d' });
+            const token = jwt.sign({ id: admin._id, role: admin.role }, SECRET_KEY, { expiresIn: '1hr' });
             res.cookie('auth_token', token, { httpOnly: true });
             // console.log(token); 
             res.status(200).json(`Login successful for ${admin.name}`);
@@ -45,6 +47,38 @@ const logout = (req, res) => {
 };
 
 
+
+// Signup User
+const signupUser = async (req, res) => {
+    const { name, email, password, CNIC, contact } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const user = new User({
+            name, email, password: hashedPassword, CNIC, contact, disabled: false
+        });
+        await user.save();
+        res.status(201).json(`User ${name} created successfully`);
+    } catch (err) {
+        res.status(422).json(err.message);
+    }
+};
+
+// Signup Teacher
+const signupTeacher = async (req, res) => {
+    const { name, email, password, CNIC, contact, subject, qualifications } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const teacher = new Teacher({
+            name, email, password: hashedPassword, CNIC, contact, subject, qualifications, disabled: false
+        });
+        await teacher.save();
+        res.status(201).json(`Teacher ${name} created successfully`);
+    } catch (err) {
+        res.status(422).json(err.message);
+    }
+};
+
+
 //get lists of all users
 const getUsers = async (req, res) => {
     try {
@@ -54,6 +88,17 @@ const getUsers = async (req, res) => {
         res.status(500).json(err.message);
     }
 };
+
+//get lists of all teachers
+const getTeachers = async (req, res) => {
+    try {
+        const teachers = await Teacher.find();
+        res.status(200).json(teachers);
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+
 
 //disable Users
 const disableUser = async (req, res) => {
@@ -91,4 +136,39 @@ const enableUser = async (req, res) => {
     }
 }
 
-module.exports = { signup, login, logout, getUsers, disableUser, enableUser};
+
+const addCourse = async (req, res) => {
+    const { courseId, courseName, startDate, endDate, teacherIds } = req.body;
+    try {
+        const course = new Course({
+            courseId,
+            courseName,
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
+            assignedTeachers: teacherIds  
+        });
+        await course.save();
+        //update each teacher's profile to include this course
+        await Teacher.updateMany(
+            { _id: { $in: teacherIds } },
+            { $push: { assignedCourses: course._id } }
+        );
+
+        res.status(201).json({ message: `Course ${courseName} created successfully and teachers assigned`, course });
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+
+
+//get all courses
+const getCourses = async (req, res) => {
+    try {
+        const courses = await Course.find();
+        res.status(200).json(courses);
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+
+module.exports = { signup, login, logout, signupUser , signupTeacher, getUsers, getTeachers, disableUser, enableUser, addCourse, getCourses};

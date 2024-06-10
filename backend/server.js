@@ -17,5 +17,8 @@ app.use('/api/users', userRoutes);
 const adminRoutes = require('./Routes/adminRoutes');
 app.use('/api/admin', adminRoutes);
 
+const teacherRoutes = require('./Routes/teacherRoutes');
+app.use('/api/teachers', teacherRoutes);
+
 const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

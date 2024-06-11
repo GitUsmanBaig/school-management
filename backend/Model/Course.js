@@ -22,7 +22,14 @@ const CourseSchema = new Schema({
     assignedTeachers: [{
         type: Schema.Types.ObjectId,
         ref: 'TeacherProfile'
-    }]
+    }],
+    enrolledstudents: {
+        type: [{
+            type: Schema.Types.ObjectId,
+            ref: 'UserProfile'
+        }],
+        default: []
+    }
 });
 
 const Course = mongoose.model('Course', CourseSchema);

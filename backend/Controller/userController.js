@@ -64,12 +64,12 @@ const enrollCourse = async(req,res)=>{
     try{
         const user = await User.findById(req.user.id);
         const course = await Course.findById(req.params.id);
-        if(user.courses.includes(req.params.id)){
-            return res.status(400).json('Course already enrolled');
+        if(user.enrolledCourses.includes(course._id)){
+            return res.status(400).json('Already enrolled in course');
         }
-        user.courses.push(req.params.id);
+        user.enrolledCourses.push(course._id);
         await user.save();
-        course.students.push(req.user.id);
+        course.students.push(user._id);
         await course.save();
         res.status(200).json('Enrolled successfully');
     }
@@ -77,6 +77,7 @@ const enrollCourse = async(req,res)=>{
         res.status(500).json(err.message);
     }
 }
+
 
 
 

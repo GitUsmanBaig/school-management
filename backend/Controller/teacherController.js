@@ -34,4 +34,15 @@ const logout = (req, res) => {
     res.status(200).json(`Logout successful`);
 };
 
-module.exports = {login, logout};
+//get All students enrolled in course id assigned to teacher
+const getAllStudents = async(req,res)=>{
+    try{
+        const teacher = await Teacher.findById(req.user.id).populate('assignedCourses');
+        const students = teacher.assignedCourses.map(course => course.students);
+        res.status(200).json(students);
+    }catch(err){
+        res.status(500).json(err.message);
+    }
+}
+
+module.exports = {login, logout, getAllStudents};

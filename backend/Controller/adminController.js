@@ -47,7 +47,6 @@ const logout = (req, res) => {
 };
 
 
-
 // Signup User
 const signupUser = async (req, res) => {
     const { name, email, password, CNIC, contact } = req.body;
@@ -78,7 +77,6 @@ const signupTeacher = async (req, res) => {
     }
 };
 
-
 //get lists of all users
 const getUsers = async (req, res) => {
     try {
@@ -98,7 +96,6 @@ const getTeachers = async (req, res) => {
         res.status(500).json(err.message);
     }
 };
-
 
 //disable Users
 const disableUser = async (req, res) => {
@@ -136,7 +133,43 @@ const enableUser = async (req, res) => {
     }
 }
 
+//disable teachers
+const disableTeacher = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const teacher = await Teacher.findById(id);
+        if (teacher) {
+            teacher.disabled = true;
+            await teacher.save();
+            res.status(200).json(`Teacher ${teacher.name} disabled successfully`);
+        } else {
+            res.status(404).json(`Teacher not found`);
+        }
+    }
+    catch (err) {
+        res.status(500).json(err.message);
+    }
+}
 
+//enable teachers
+const enableTeacher = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const teacher = await Teacher.findById(id);
+        if (teacher) {
+            teacher.disabled = false;
+            await teacher.save();
+            res.status(200).json(`Teacher ${teacher.name} enabled successfully`);
+        } else {
+            res.status(404).json(`Teacher not found`);
+        }
+    }
+    catch (err) {
+        res.status(500).json(err.message);
+    }
+}
+
+//add course
 const addCourse = async (req, res) => {
     const { courseId, courseName, startDate, endDate, teacherIds } = req.body;
     try {
@@ -171,4 +204,4 @@ const getCourses = async (req, res) => {
     }
 };
 
-module.exports = { signup, login, logout, signupUser , signupTeacher, getUsers, getTeachers, disableUser, enableUser, addCourse, getCourses};
+module.exports = { signup, login, logout, signupUser , signupTeacher, getUsers, getTeachers, disableUser, enableUser,disableTeacher,enableTeacher, addCourse, getCourses};

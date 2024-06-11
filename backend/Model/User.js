@@ -11,7 +11,17 @@ const UserSchema = new Schema({
         type: String,
         default: 'user',
     },
-    disabled: Boolean,
+    disabled:{
+        type: Boolean,
+        default: false
+    },
+    enrolledCourses: {
+        type: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Course'
+        }],
+        default: []
+    }
 });
 
 const UserProfile = mongoose.model('UserProfile', UserSchema);

@@ -171,23 +171,50 @@ const enableTeacher = async (req, res) => {
 
 //add course
 const addCourse = async (req, res) => {
-    const { courseId, courseName, startDate, endDate, teacherIds } = req.body;
+    const { courseId, courseName, startDate, endDate } = req.body;
     try {
+        const existingCourse = await Course.findOne({ courseId });
+        if (existingCourse) {
+            return res.status(409).json({ message: "Course ID already exists" });
+        }
+
         const course = new Course({
             courseId,
             courseName,
             startDate: new Date(startDate),
             endDate: new Date(endDate),
-            assignedTeachers: teacherIds  
+            assignedTeachers: []  // Initially no teachers assigned
         });
         await course.save();
-        //update each teacher's profile to include this course
+
+        res.status(201).json({ message: `Course ${courseName} created successfully`, course });
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+
+
+//assign teacher to course
+const assignCourse = async (req, res) => {
+    const { courseId, teacherIds } = req.body;
+    try {
+        const course = await Course.findOne({ courseId });
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+
+        // Add teachers to the course, ensuring no duplicates
+        const uniqueTeacherIds = [...new Set([...course.assignedTeachers, ...teacherIds])];
+        course.assignedTeachers = uniqueTeacherIds;
+        await course.save();
+
+        // Optionally, update each teacher's profile to include this course
         await Teacher.updateMany(
             { _id: { $in: teacherIds } },
             { $push: { assignedCourses: course._id } }
         );
 
-        res.status(201).json({ message: `Course ${courseName} created successfully and teachers assigned`, course });
+        res.status(200).json({ message: `Teachers assigned to course ${course.courseName} successfully`, course });
     } catch (err) {
         res.status(500).json(err.message);
     }
@@ -204,4 +231,23 @@ const getCourses = async (req, res) => {
     }
 };
 
-module.exports = { signup, login, logout, signupUser , signupTeacher, getUsers, getTeachers, disableUser, enableUser,disableTeacher,enableTeacher, addCourse, getCourses};
+
+//get list of teacher assigned to a course
+const getAssignedTeachers = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const course = await Course.findOne({ _id: id }).populate('assignedTeachers');
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+        res.status(200).json(course.assignedTeachers);
+    }
+    catch (err) {
+        res.status(500).json(err.message);
+    }
+}
+
+
+
+
+module.exports = { signup, login, logout, signupUser , signupTeacher, getUsers, getTeachers, disableUser, enableUser,disableTeacher,enableTeacher, addCourse, assignCourse, getCourses, getAssignedTeachers};

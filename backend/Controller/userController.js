@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 require ('dotenv').config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
-;
 
 // Login   
 const login = async (req, res) => {
@@ -58,20 +57,69 @@ const getCourseById = async(req,res)=>{
     }
 }
 
-
 //enroll into course
-const enrollCourse = async(req,res)=>{
-    try{
+const enrollCourse = async(req,res) => {
+    try {
+        // if (!req.user || !req.user.id) {
+        //     return res.status(401).json("User not authenticated");
+        // }
         const user = await User.findById(req.user.id);
         const course = await Course.findById(req.params.id);
-        if(user.enrolledCourses.includes(course._id)){
-            return res.status(400).json('Already enrolled in course');
+
+        if (!course) {
+            return res.status(404).json("Course not found");
         }
+
+        if (user.enrolledCourses.includes(course._id)) {
+            return res.status(400).json("Already enrolled in course");
+        }
+
         user.enrolledCourses.push(course._id);
         await user.save();
-        course.students.push(user._id);
+        if (!course.enrolledstudents) {
+            course.enrolledstudents = [];
+        }
+        course.enrolledstudents.push(user._id);
         await course.save();
-        res.status(200).json('Enrolled successfully');
+
+        res.status(200).json("Enrolled successfully");
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+
+//unenrll from course uses delete method
+const unenrollCourse = async(req,res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        const course = await Course.findById(req.params.id);
+
+        if (!course) {
+            return res.status(404).json("Course not found");
+        }
+
+        if (!user.enrolledCourses.includes(course._id)) {
+            return res.status(400).json("Not enrolled in course");
+        }
+
+        user.enrolledCourses = user.enrolledCourses.filter(courseId => courseId.toString() !== course._id.toString());
+        await user.save();
+        course.enrolledstudents = course.enrolledstudents.filter(studentId => studentId.toString() !== user._id.toString());
+        await course.save();
+        
+        res.status(200).json("Unenrolled successfully");
+    }
+    catch (err) {
+        res.status(500).json(err.message);
+    }
+}
+
+
+//get user enrolled courses
+const getEnrolledCourses = async(req,res)=>{
+    try{
+        const user = await User.findById(req.user.id).populate('enrolledCourses');
+        res.status(200).json(user.enrolledCourses);
     }
     catch(err){
         res.status(500).json(err.message);
@@ -81,4 +129,5 @@ const enrollCourse = async(req,res)=>{
 
 
 
-module.exports = {login, logout, getAllCourses, getCourseById, enrollCourse};
+
+module.exports = {login, logout, getAllCourses, getCourseById, enrollCourse,unenrollCourse, getEnrolledCourses};

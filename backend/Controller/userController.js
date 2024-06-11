@@ -1,4 +1,5 @@
 const User = require('../Model/User'); 
+const Course = require('../Model/Course');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 require ('dotenv').config();
@@ -36,4 +37,47 @@ const logout = (req, res) => {
     console.log(req.user);
 };
 
-module.exports = {login, logout};
+
+//get All courses
+const getAllCourses = async(req,res)=>{
+    try{
+        const courses = await Course.find();
+        res.status(200).json(courses);
+    }catch(err){
+        res.status(500).json(err.message);
+    }
+}
+
+//get course by id
+const getCourseById = async(req,res)=>{
+    try{
+        const course = await Course.findById(req.params.id);
+        res.status(200).json(course);
+    }catch(err){
+        res.status(500).json(err.message);
+    }
+}
+
+
+//enroll into course
+const enrollCourse = async(req,res)=>{
+    try{
+        const user = await User.findById(req.user.id);
+        const course = await Course.findById(req.params.id);
+        if(user.courses.includes(req.params.id)){
+            return res.status(400).json('Course already enrolled');
+        }
+        user.courses.push(req.params.id);
+        await user.save();
+        course.students.push(req.user.id);
+        await course.save();
+        res.status(200).json('Enrolled successfully');
+    }
+    catch(err){
+        res.status(500).json(err.message);
+    }
+}
+
+
+
+module.exports = {login, logout, getAllCourses, getCourseById, enrollCourse};

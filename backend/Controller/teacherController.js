@@ -46,15 +46,33 @@ const getAssignedCourses = async(req,res)=>{
     }
 }
 
-//get All students enrolled in course id assigned to teacher
-const getAllStudents = async(req,res)=>{
-    try{
-        const teacher = await Teacher.findById(req.user.id).populate('assignedCourses');
-        const students = teacher.assignedCourses.map(course => course.students);
+
+const getAllStudents = async (req, res) => {
+    try {
+        const courseId = req.params.id; 
+        const teacher = await Teacher.findById(req.user.id).populate({
+            path: 'assignedCourses',
+            populate: { path: 'enrolledstudents' }
+        });
+
+        const course = teacher.assignedCourses.find(course => course._id.toString() === courseId);
+
+        if (!course) {
+            return res.status(403).json("Access Denied. This course is not assigned to you.");
+        }
+
+        const students = course.enrolledstudents.map(student => ({
+            id: student._id,
+            name: student.name,
+            email: student.email
+        }));
+
         res.status(200).json(students);
-    }catch(err){
+    } catch (err) {
+        console.error(err);
         res.status(500).json(err.message);
     }
-}
+};
+
 
 module.exports = {login, logout,getAssignedCourses , getAllStudents};

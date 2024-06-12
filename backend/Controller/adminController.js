@@ -248,6 +248,21 @@ const getAssignedTeachers = async (req, res) => {
 }
 
 
+//get lsit of students enrolled to a course
+const getEnrolledStudents = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const course = await Course.findOne({ _id: id }).populate('enrolledstudents');
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+        res.status(200).json(course.enrolledstudents);
+    }
+    catch (err) {
+        res.status(500).json(err.message);
+    }
+}
 
 
-module.exports = { signup, login, logout, signupUser , signupTeacher, getUsers, getTeachers, disableUser, enableUser,disableTeacher,enableTeacher, addCourse, assignCourse, getCourses, getAssignedTeachers};
+
+module.exports = { signup, login, logout, signupUser , signupTeacher, getUsers, getTeachers, disableUser, enableUser,disableTeacher,enableTeacher, addCourse, assignCourse, getCourses, getAssignedTeachers, getEnrolledStudents};

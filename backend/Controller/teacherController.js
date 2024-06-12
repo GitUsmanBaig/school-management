@@ -14,10 +14,10 @@ const login = async (req, res) => {
             if (teacher.disabled === true) {
                 return res.status(401).json('teacher is disabled');
             }
-            else{
-                const token = jwt.sign({ id: teacher._id }, SECRET_KEY, { expiresIn: '1d' });
+            else {
+                // Include the role in the token
+                const token = jwt.sign({ id: teacher._id, role: 'teacher' }, SECRET_KEY, { expiresIn: '1hr' });
                 res.cookie('auth_token', token, { httpOnly: true });
-                // console.log(token); 
                 res.status(200).json(`Login successful for ${teacher.name}`);
             }
         } else {
@@ -28,11 +28,23 @@ const login = async (req, res) => {
     }
 };
 
+
 // Logout
 const logout = (req, res) => {
     res.cookie('auth_token', '', { expires: new Date(0) });
     res.status(200).json(`Logout successful`);
 };
+
+
+//get all assigned courses to teacher
+const getAssignedCourses = async(req,res)=>{
+    try{
+        const teacher = await Teacher.findById(req.user.id).populate('assignedCourses');
+        res.status(200).json(teacher.assignedCourses);
+    }catch(err){
+        res.status(500).json(err.message);
+    }
+}
 
 //get All students enrolled in course id assigned to teacher
 const getAllStudents = async(req,res)=>{
@@ -45,4 +57,4 @@ const getAllStudents = async(req,res)=>{
     }
 }
 
-module.exports = {login, logout, getAllStudents};
+module.exports = {login, logout,getAssignedCourses , getAllStudents};

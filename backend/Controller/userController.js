@@ -127,7 +127,43 @@ const getEnrolledCourses = async(req,res)=>{
 }
 
 
+//update user
+const updateProfile = async(req,res)=>{
+    const { id } = req.user;  
+    const { name, email, currentPassword, newPassword } = req.body;
+
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (name) {
+            user.name = name;
+        }
+        if (email) {
+            user.email = email;
+        }
+
+        if (currentPassword && newPassword) {
+            const validPassword = await bcrypt.compare(currentPassword, user.password);
+            if (!validPassword) {
+                return res.status(400).json({ message: "Current password is incorrect" });
+            }
+            user.password = await bcrypt.hash(newPassword, 10);
+        }
+
+        await user.save();
+        res.status(200).json({ message: "Profile updated successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error updating profile" });
+    }
+}
 
 
 
-module.exports = {login, logout, getAllCourses, getCourseById, enrollCourse,unenrollCourse, getEnrolledCourses};
+
+
+
+module.exports = {login, logout, getAllCourses, getCourseById, enrollCourse,unenrollCourse, getEnrolledCourses, updateProfile};

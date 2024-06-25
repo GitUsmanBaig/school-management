@@ -158,7 +158,7 @@ describe('User Controller', () => {
             });
             await course.save();
 
-            const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+            const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '1hr' });
 
             const res = await request(app)
                 .post(`/api/users/courses/enroll/${course._id}`)

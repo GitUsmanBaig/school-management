@@ -43,7 +43,6 @@ const login = async (req, res) => {
 const logout = (req, res) => {
     res.cookie('auth_token', '', { expires: new Date(0) });
     res.status(200).json(`Logout successful`);
-    console.log(req.user);
 };
 
 

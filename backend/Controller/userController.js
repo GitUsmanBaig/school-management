@@ -35,7 +35,6 @@ const logout = (req, res) => {
     res.status(200).json(`Logout successful`);
 };
 
-
 //get All courses
 const getAllCourses = async(req,res)=>{
     try{
@@ -113,7 +112,6 @@ const unenrollCourse = async(req,res) => {
     }
 }
 
-
 //get user enrolled courses
 const getEnrolledCourses = async(req,res)=>{
     try{
@@ -124,7 +122,6 @@ const getEnrolledCourses = async(req,res)=>{
         res.status(500).json(err.message);
     }
 }
-
 
 //update user
 const updateProfile = async(req,res)=>{

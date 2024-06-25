@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 
-// Load environment variables
 dotenv.config();
 
 if (!process.env.MONGODB_URL) {
@@ -23,7 +22,6 @@ const Teacher = require('../Model/Teacher');
 const Course = require('../Model/Course');
 const adminRoutes = require('../Routes/adminRoutes');
 
-// Middleware to set the user in req.user
 app.use((req, res, next) => {
     if (req.cookies.auth_token) {
         try {

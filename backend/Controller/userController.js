@@ -161,8 +161,4 @@ const updateProfile = async(req,res)=>{
 }
 
 
-
-
-
-
 module.exports = {login, logout, getAllCourses, getCourseById, enrollCourse,unenrollCourse, getEnrolledCourses, updateProfile};

@@ -1,0 +1,33 @@
+.sidebar {
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px;
+    font-size: 16px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+
+    ul {
+        list-style: none;
+        padding: 0;
+  
+        li {
+          margin-bottom: 15px;
+  
+          a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            transition: all 0.3s;
+            border-radius: 8px;
+  
+            &:hover {
+              background-color: #495057;
+              transform: scale(1.05);
+            }
+          }
+        }
+    }
+  }

@@ -8,13 +8,17 @@ import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { AdminNavbarComponent } from './components/admin-navbar/admin-navbar.component';
+import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    AdminNavbarComponent,
+    AdminSidebarComponent
   ],
   imports: [
     BrowserModule,

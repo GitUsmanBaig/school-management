@@ -2,13 +2,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require("cookie-parser");
 const dotenv = require('dotenv');
+const cors = require('cors'); 
 
 dotenv.config();
 const app = express();
+
+app.use(cors({
+  origin: '*', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(cookieParser());
 app.use(express.json()); 
 
-mongoose.connect(process.env.MONGODB_URL).then(console.log('Connected to MongoDB'))
+mongoose.connect(process.env.MONGODB_URL).then(() => console.log('Connected to MongoDB'))
     .catch(error => console.log(error.reason));
 
 const userRoutes = require('./Routes/userRoutes');

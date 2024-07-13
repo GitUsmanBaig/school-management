@@ -1,0 +1,32 @@
+<div class="login-container">
+  <div class="login-form">
+    <h2>Welcome back!</h2>
+    <!-- Add (ngSubmit) to handle form submission through Angular -->
+    <form (ngSubmit)="login()">
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <!-- Added 'id' to match the 'for' attribute in the label -->
+        <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="Enter your email address" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password *</label>
+        <!-- Added 'id' to match the 'for' attribute in the label -->
+        <input type="password" id="password" [(ngModel)]="password" name="password" placeholder="Enter password" required>
+      </div>
+      <div class="form-actions">
+        <div class="checkbox">
+          <input type="checkbox" id="remember-me">
+          <label for="remember-me">Remember me</label>
+        </div>
+      </div>
+      <!-- Changed button type to 'submit' to handle form submission -->
+      <button type="submit">Log in</button>
+      <!-- Prevent default link behavior to handle via Angular -->
+      <p>Don't have an account? <a href="#" (click)="$event.preventDefault(); goToRegister()">Register here</a></p>
+    </form>
+  </div>
+
+  <div class="login-image">
+    <img src="../../assets/Wavy_Tech-28_Single-10.jpg" alt="Decorative">
+  </div>
+</div>

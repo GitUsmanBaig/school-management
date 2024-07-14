@@ -13,6 +13,8 @@ import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.
 import { AdminStudentComponent } from './admin-student/admin-student.component';
 import { AdminTeacherComponent } from './admin-teacher/admin-teacher.component';
 import { AdminCourseComponent } from './admin-course/admin-course.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AdminAddStudentComponent } from './admin-add-student/admin-add-student.component';
 
 @NgModule({
   declarations: [
@@ -24,13 +26,15 @@ import { AdminCourseComponent } from './admin-course/admin-course.component';
     AdminSidebarComponent,
     AdminStudentComponent,
     AdminTeacherComponent,
-    AdminCourseComponent
+    AdminCourseComponent,
+    AdminAddStudentComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

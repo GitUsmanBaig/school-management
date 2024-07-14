@@ -16,7 +16,11 @@ const authenticate_user = (req, res, next) => {
 
 
 const authenticate_admin = (req, res, next) => {
-    const token = req.cookies.auth_token;
+    // Extract the token from the Authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).send('Access Denied. No token provided.');
+
+    const token = authHeader.split(' ')[1]; // Assuming 'Bearer TOKEN_STRING' format
     if (!token) return res.status(401).send('Access Denied. Please login first.');
 
     try {

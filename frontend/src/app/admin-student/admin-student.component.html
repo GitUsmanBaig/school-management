@@ -1,43 +1,51 @@
 <div class="dashboard-container">
-    <app-admin-navbar></app-admin-navbar>
-    <app-admin-sidebar></app-admin-sidebar>
-    <main class="content">
-      <div class="controls">
-        <input type="text" [(ngModel)]="searchTerm" placeholder="Search students..." (input)="filterStudents()" class="search-bar">
-        <button class="add-button" (click)="addStudent()">Add Student</button>
+  <app-admin-navbar></app-admin-navbar>
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="content">
+    <div class="controls">
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search students..." (input)="filterStudents()" class="search-bar">
+      <!-- Button triggers the modal display -->
+      <button class="add-button" (click)="showAddStudentModal = true">Add Student</button>
+    </div>
+    <!-- Only display the table if there are students to show -->
+    <div class="student-list" *ngIf="filteredStudents.length > 0; else noResultsTemplate">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>CNIC</th>
+            <th>Contact</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of filteredStudents" [class.disabled]="!student.isEnabled">
+            <td>{{ student.name }}</td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.CNIC }}</td>
+            <td>{{ student.contact }}</td>
+            <td>
+              <button (click)="enableStudent(student)" [disabled]="student.isEnabled" class="btn-enable">Enable</button>
+              <button (click)="disableStudent(student)" [disabled]="!student.isEnabled" class="btn-disable">Disable</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Modal for adding a student -->
+    <div *ngIf="showAddStudentModal" class="modal">
+      <div class="modal-content">
+        <span class="close" (click)="showAddStudentModal = false">&times;</span>
+        <app-admin-add-student #adminAddStudent (studentAdded)="onStudentAdded()"></app-admin-add-student>
       </div>
-      <!-- Only display the table if there are students to show -->
-      <div class="student-list" *ngIf="filteredStudents.length > 0; else noResultsTemplate">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>CNIC</th>
-              <th>Contact</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let student of filteredStudents">
-              <td>{{ student.name }}</td>
-              <td>{{ student.email }}</td>
-              <td>{{ student.CNIC }}</td>
-              <td>{{ student.contact }}</td>
-              <td>
-                <button (click)="enableStudent(student.id)" class="btn-enable">Enable</button>
-                <button (click)="disableStudent(student.id)" class="btn-disable">Disable</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </main>
-    <!-- Template that displays when there are no search results -->
-    <ng-template #noResultsTemplate>
-      <div class="no-results">
-        <img src="../../assets/1.png" alt="No results found">
-        <p>No results found</p>
-      </div>
-    </ng-template>
-  </div>
+    </div>
+  </main>
+  <!-- Template that displays when there are no search results -->
+  <ng-template #noResultsTemplate>
+    <div class="no-results">
+      <img src="../../assets/1.png" alt="No results found">
+      <p>No results found</p>
+    </div>
+  </ng-template>
+</div>

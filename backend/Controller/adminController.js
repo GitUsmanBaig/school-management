@@ -8,6 +8,7 @@ require ('dotenv').config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
+
 // Signup
 const signup = async (req, res) => {
     const { name, email, password, CNIC, contact } = req.body;
@@ -25,19 +26,18 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const admin = await Admin.findOne ({ email });
+        const admin = await Admin.findOne({ email });
         if (admin && await bcrypt.compare(password, admin.password)) {
             const token = jwt.sign({ id: admin._id, role: admin.role }, SECRET_KEY, { expiresIn: '1hr' });
-            res.cookie('auth_token', token, { httpOnly: true });
-            // console.log(token); 
-            res.status(200).json(`Login successful for ${admin.name}`);
+            res.status(200).json({ message: `Login successful for ${admin.name}`, token: token });  // Include token in response
         } else {
             res.status(401).json('Invalid email or password');
         }
-    }catch (err) {
+    } catch (err) {
         res.status(500).json(err.message);
     }
 }
+
 
 // Logout
 const logout = (req, res) => {

@@ -1,133 +1,171 @@
 .dashboard-container {
-    display: grid;
-    grid-template-areas: 
-      "nav nav nav"
-      "sidebar content content";
-    grid-template-columns: 250px 1fr;
-    grid-template-rows: 80px 1fr;
-    height: 100vh;
-  
-    app-admin-navbar {
-      grid-area: nav;
-    }
-  
-    app-admin-sidebar {
-      grid-area: sidebar;
-    }
-  
-    .content {
-      grid-area: content;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
-    }
-  
+  display: grid;
+  grid-template-areas: 
+    "nav nav nav"
+    "sidebar content content";
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 80px 1fr;
+  height: 100vh;
 
-    .controls {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-      }
-      
-      .search-bar {
-        flex-grow: 1;
-        padding: 10px;
-        margin-right: 10px; // Spacing between search bar and add button
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-      
-      .add-button {
-        padding: 10px 20px;
-        background-color: #007bff; // Bootstrap primary blue
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      
-      .add-button:hover {
+  app-admin-navbar {
+    grid-area: nav;
+  }
+
+  app-admin-sidebar {
+    grid-area: sidebar;
+  }
+
+  .content {
+    grid-area: content;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+  }
+  
+  .search-bar {
+      flex-grow: 1;
+      padding: 10px;
+      margin-right: 10px; // Spacing between search bar and add button
+      border: 1px solid #ccc;
+      border-radius: 4px;
+  }
+  
+  .add-button {
+      padding: 10px 20px;
+      background-color: #007bff; // Bootstrap primary blue
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+
+      &:hover {
         background-color: #0056b3;
       }
+  }
 
-      .no-results {
-        text-align: center;
-        padding: 20px;
-      }
-      
-      .no-results img {
+  .no-results {
+      text-align: center;
+      padding: 20px;
+
+      img {
         width: 300px;  // Adjust size as needed
         margin-bottom: 20px;
       }
-      
 
-      
-    .student-list {
-      width: 100%;
-      table {
+      p {
+        color: #666;
+      }
+  }
+  
+  .student-list {
+    width: 100%;
+
+    table {
         width: 100%;
         margin: 0 auto;
         border-collapse: collapse;
-        transition: all 0.3s ease; // Smooth transition for hover effects
         font-family: 'Arial', sans-serif; // Modern and readable font
-  
+
         th, td {
-          border-bottom: 1px solid #ccc;
-          padding: 10px 15px;
-          text-align: left;
-          transition: background-color 0.3s ease; // Smooth background transition
+            border-bottom: 1px solid #ccc;
+            padding: 10px 15px;
+            text-align: left;
         }
-  
+
         th {
-          background-color: #f4f4f4;
-          color: #333; // Dark grey for better readability
-          font-size: 16px; // Slightly larger for headers
-          font-weight: bold; // Bold text for headers
+            background-color: #f4f4f4;
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
         }
-  
+
         td {
-          color: #666; // Lighter grey for content
-          font-size: 14px; // Standard size for content
-          &:hover {
-            background-color: #f9f9f9; // Light grey on hover for rows
-          }
+            color: #666;
+            font-size: 14px;
         }
-  
+
         tr:hover {
-          background-color: #f1f1f1; // Subtle grey background on hover for the entire row
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Soft shadow for depth
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+            &.disabled {
+                background-color: #e8b1b1; // Slightly darker red for disabled rows on hover
+                box-shadow: none; // Optionally remove shadow if it doesn't fit the disabled state style
+            }
         }
-  
+
         .btn-enable, .btn-disable {
-          padding: 5px 10px;
-          margin-right: 10px;
-          cursor: pointer;
-          font-size: 0.85rem;
-          border: none;
-          border-radius: 4px;
-          transition: transform 0.2s ease; // Smooth transform for button interaction
-  
-          &:hover {
-            transform: translateY(-2px); // Slight raise effect on hover
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); // Subtle shadow for raised effect
-          }
+            padding: 5px 10px;
+            margin-right: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            border: none;
+            border-radius: 4px;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            }
         }
-  
+
         .btn-enable {
-          background-color: #28a745; // Green for enable
-          color: white;
+            background-color: #28a745; // Green for enable
+            color: white;
         }
-  
+
         .btn-disable {
-          background-color: #dc3545; // Red for disable
-          color: white;
+            background-color: #df4c5b; // Red for disable
+            color: white;
         }
 
-
-
-      }
+        .disabled {
+            background-color: #f8d7da; // Pale red for disabled students
+        }
     }
-  }
-  
+}
+
+
+.modal {
+  display: block; /* Hidden by default, set to block to show */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+}

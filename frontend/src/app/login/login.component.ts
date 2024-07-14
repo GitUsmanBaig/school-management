@@ -19,15 +19,17 @@ export class LoginComponent {
       password: this.password,
     };
 
-    this.http.post("http://localhost:3003/api/admin/login", bodyData, { responseType: 'text' }).subscribe(
-      (resultData: string) => {
+    // Change responseType to 'json' since you expect a JSON response that includes a token
+    this.http.post<any>("http://localhost:3003/api/admin/login", bodyData).subscribe(
+      (resultData) => {
         console.log("Response Data:", resultData);
 
-        if (resultData.includes("Login successful")) {
+        if (resultData.message && resultData.token) {
           console.log("Login successful, navigating to home.");
+          localStorage.setItem('auth_token', resultData.token); // Store the token in localStorage
           this.router.navigateByUrl('/home');
         } else {
-          console.log("Login failed with message: ", resultData);
+          console.log("Login failed with message: ", resultData.message);
           alert("Incorrect Email or Password");
         }
       },

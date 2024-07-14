@@ -1,0 +1,11 @@
+<div class="add-student-form">
+    <form #studentForm="ngForm" (ngSubmit)="onSubmit(studentForm)">
+      <input type="text" ngModel name="name" placeholder="Student Name" required>
+      <input type="email" ngModel name="email" placeholder="Student Email" required>
+      <input type="text" ngModel name="password" placeholder="Student Password" required>
+      <input type="text" ngModel name="CNIC" placeholder="Student CNIC" required>
+      <input type="text" ngModel name="contact" placeholder="Student Contact" required>
+      <button type="submit" [disabled]="studentForm.invalid">Add Student</button>
+    </form>
+  </div>
+  

@@ -10,6 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AdminNavbarComponent } from './components/admin-navbar/admin-navbar.component';
 import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.component';
+import { AdminStudentComponent } from './admin-student/admin-student.component';
+import { AdminTeacherComponent } from './admin-teacher/admin-teacher.component';
+import { AdminCourseComponent } from './admin-course/admin-course.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,10 @@ import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.
     RegisterComponent,
     HomeComponent,
     AdminNavbarComponent,
-    AdminSidebarComponent
+    AdminSidebarComponent,
+    AdminStudentComponent,
+    AdminTeacherComponent,
+    AdminCourseComponent
   ],
   imports: [
     BrowserModule,

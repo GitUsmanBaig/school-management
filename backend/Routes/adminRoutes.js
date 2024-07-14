@@ -12,7 +12,7 @@ const {authenticate_admin} = require('../Middleware/authMiddleware');
 router.post('/signup', signup);
 router.post('/login', login);
 router.post('/logout', logout);
-router.get('/user/all',authenticate_admin, getUsers);
+router.get('/user/all', getUsers);
 router.get('/teacher/all', authenticate_admin, getTeachers);
 router.patch('/user/disable/:id',authenticate_admin, disableUser);
 router.patch('/user/enable/:id', authenticate_admin, enableUser);

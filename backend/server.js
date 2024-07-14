@@ -8,10 +8,12 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: '*', 
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  origin: 'http://localhost:4200',
+  credentials: true, 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 
 app.use(cookieParser());
 app.use(express.json()); 

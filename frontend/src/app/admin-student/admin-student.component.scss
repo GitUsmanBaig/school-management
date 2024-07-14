@@ -4,7 +4,7 @@
       "nav nav nav"
       "sidebar content content";
     grid-template-columns: 250px 1fr;
-    grid-template-rows: 80px 1fr; // Adjusted for navbar height
+    grid-template-rows: 80px 1fr;
     height: 100vh;
   
     app-admin-navbar {
@@ -20,18 +20,113 @@
       padding: 20px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      align-items: stretch;
+      justify-content: flex-start;
+    }
   
-      h1 {
-        font-size: 24px;
+
+    .controls {
+        display: flex;
+        justify-content: space-between;
         margin-bottom: 20px;
       }
+      
+      .search-bar {
+        flex-grow: 1;
+        padding: 10px;
+        margin-right: 10px; // Spacing between search bar and add button
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      
+      .add-button {
+        padding: 10px 20px;
+        background-color: #007bff; // Bootstrap primary blue
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .add-button:hover {
+        background-color: #0056b3;
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 20px;
+      }
+      
+      .no-results img {
+        width: 300px;  // Adjust size as needed
+        margin-bottom: 20px;
+      }
+      
+
+      
+    .student-list {
+      width: 100%;
+      table {
+        width: 100%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        transition: all 0.3s ease; // Smooth transition for hover effects
+        font-family: 'Arial', sans-serif; // Modern and readable font
   
-      img {
-        width: 50%; // Maintain size or adjust based on preference
-        height: auto;
-        border-radius: 8px;
+        th, td {
+          border-bottom: 1px solid #ccc;
+          padding: 10px 15px;
+          text-align: left;
+          transition: background-color 0.3s ease; // Smooth background transition
+        }
+  
+        th {
+          background-color: #f4f4f4;
+          color: #333; // Dark grey for better readability
+          font-size: 16px; // Slightly larger for headers
+          font-weight: bold; // Bold text for headers
+        }
+  
+        td {
+          color: #666; // Lighter grey for content
+          font-size: 14px; // Standard size for content
+          &:hover {
+            background-color: #f9f9f9; // Light grey on hover for rows
+          }
+        }
+  
+        tr:hover {
+          background-color: #f1f1f1; // Subtle grey background on hover for the entire row
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Soft shadow for depth
+        }
+  
+        .btn-enable, .btn-disable {
+          padding: 5px 10px;
+          margin-right: 10px;
+          cursor: pointer;
+          font-size: 0.85rem;
+          border: none;
+          border-radius: 4px;
+          transition: transform 0.2s ease; // Smooth transform for button interaction
+  
+          &:hover {
+            transform: translateY(-2px); // Slight raise effect on hover
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); // Subtle shadow for raised effect
+          }
+        }
+  
+        .btn-enable {
+          background-color: #28a745; // Green for enable
+          color: white;
+        }
+  
+        .btn-disable {
+          background-color: #dc3545; // Red for disable
+          color: white;
+        }
+
+
+
       }
     }
   }

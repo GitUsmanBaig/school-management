@@ -1,10 +1,43 @@
-
 <div class="dashboard-container">
     <app-admin-navbar></app-admin-navbar>
     <app-admin-sidebar></app-admin-sidebar>
     <main class="content">
-      <p>This is the student management section.</p>
-      <img src="../../assets/3.jpg" alt="Admin Image"> 
+      <div class="controls">
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search students..." (input)="filterStudents()" class="search-bar">
+        <button class="add-button" (click)="addStudent()">Add Student</button>
+      </div>
+      <!-- Only display the table if there are students to show -->
+      <div class="student-list" *ngIf="filteredStudents.length > 0; else noResultsTemplate">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>CNIC</th>
+              <th>Contact</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of filteredStudents">
+              <td>{{ student.name }}</td>
+              <td>{{ student.email }}</td>
+              <td>{{ student.CNIC }}</td>
+              <td>{{ student.contact }}</td>
+              <td>
+                <button (click)="enableStudent(student.id)" class="btn-enable">Enable</button>
+                <button (click)="disableStudent(student.id)" class="btn-disable">Disable</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </main>
+    <!-- Template that displays when there are no search results -->
+    <ng-template #noResultsTemplate>
+      <div class="no-results">
+        <img src="../../assets/1.png" alt="No results found">
+        <p>No results found</p>
+      </div>
+    </ng-template>
   </div>
-  

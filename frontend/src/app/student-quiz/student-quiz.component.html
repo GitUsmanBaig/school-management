@@ -1,0 +1,32 @@
+
+<div class="dashboard-container">
+  <app-student-navbar></app-student-navbar>
+  <app-student-sidebar></app-student-sidebar>
+  <main class="content">
+    <div class="controls">
+      <label for="course">Select Course:</label>
+      <select id="course" [(ngModel)]="selectedCourse" (change)="viewQuizScores()">
+        <option *ngFor="let course of courses" [value]="course._id">{{ course.courseName }}</option>
+      </select>
+    </div>
+    <div *ngIf="quizScores">
+      <table *ngIf="quizScores.message !== 'No quiz scores available'; else noDataTemplate">
+        <thead>
+          <tr>
+            <th>Quiz 1 Score</th>
+            <th>Quiz 2 Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ quizScores.quiz1 }}</td>
+            <td>{{ quizScores.quiz2 }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #noDataTemplate>
+        <img src="../../assets/1.png" alt="No data">
+      </ng-template>
+    </div>
+  </main>
+</div>

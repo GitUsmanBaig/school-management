@@ -1,0 +1,28 @@
+<div class="assign-course-form">
+    <div class="modal-header">
+      <h2>Assign Teachers to Course</h2>
+    </div>
+    <div class="modal-body">
+      <p><strong>Course ID:</strong> {{ course.courseId }}</p>
+      <p><strong>Course Name:</strong> {{ course.courseName }}</p>
+      <p><strong>Start Date:</strong> {{ course.startDate | date }}</p>
+      <p><strong>End Date:</strong> {{ course.endDate | date }}</p>
+      <form #assignForm="ngForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="teacher-dropdown">
+          <mat-label>Select Teachers</mat-label>
+          <mat-select multiple [(ngModel)]="selectedTeachers" name="selectedTeachers">
+            <mat-option *ngFor="let teacher of teachers" [value]="teacher._id" [disabled]="assignedTeachers.includes(teacher._id)">
+              <ng-container *ngIf="assignedTeachers.includes(teacher._id)">
+                {{ teacher.name }} [assigned]
+              </ng-container>
+              <ng-container *ngIf="!assignedTeachers.includes(teacher._id)">
+                {{ teacher.name }}
+              </ng-container>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button type="submit" [disabled]="!selectedTeachers.length">Assign Teachers</button>
+      </form>
+    </div>
+  </div>
+  

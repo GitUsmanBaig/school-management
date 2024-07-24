@@ -1,38 +1,195 @@
 .dashboard-container {
-    display: grid;
-    grid-template-areas: 
-      "nav nav nav"
-      "sidebar content content";
-    grid-template-columns: 250px 1fr;
-    grid-template-rows: 80px 1fr; // Adjusted for navbar height
-    height: 100vh;
-  
-    app-admin-navbar {
-      grid-area: nav;
+  display: grid;
+  grid-template-areas: 
+    "nav nav nav"
+    "sidebar content content";
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 80px 1fr;
+  height: 100vh;
+
+  app-admin-navbar {
+    grid-area: nav;
+  }
+
+  app-admin-sidebar {
+    grid-area: sidebar;
+  }
+
+  .content {
+    grid-area: content;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .search-bar {
+    flex-grow: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .add-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #0056b3;
     }
-  
-    app-admin-sidebar {
-      grid-area: sidebar;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 20px;
+
+    img {
+      width: 300px;
+      margin-bottom: 20px;
     }
-  
-    .content {
-      grid-area: content;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-  
-      h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
+
+    p {
+      color: #666;
+    }
+  }
+
+  .course-list {
+    width: 100%;
+
+    table {
+      width: 100%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      font-family: 'Arial', sans-serif;
+
+      th, td {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 15px;
+        text-align: left;
       }
-  
-      img {
-        width: 50%; // Maintain size or adjust based on preference
-        height: auto;
-        border-radius: 8px;
+
+      th {
+        background-color: #f4f4f4;
+        color: #333;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      td {
+        color: #666;
+        font-size: 14px;
+      }
+
+      tr:hover {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-assign, .btn-delete {
+        padding: 5px 10px;
+        margin-right: 10px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        border: none;
+        border-radius: 4px;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      .btn-assign {
+        background-color: #28a745; // Green for assign
+        color: white;
+      }
+
+      .btn-delete {
+        background-color: #df4c5b; // Red for delete
+        color: white;
       }
     }
   }
-  
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.modal-content.small-modal {
+  width: 400px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn-confirm {
+  padding: 10px 20px;
+  background-color: #28a745; /* Green for confirm */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #218838;
+  }
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  background-color: #6c757d; /* Grey for cancel */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #5a6268;
+  }
+}

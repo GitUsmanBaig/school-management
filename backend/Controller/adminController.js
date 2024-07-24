@@ -14,7 +14,7 @@ const signup = async (req, res) => {
     const { name, email, password, CNIC, contact } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 12);
-        const admin = new Admin({ name, email, password: hashedPassword, CNIC, contact, disabled: false });
+        const admin = new Admin({ name, email, password: hashedPassword, CNIC, contact, disabled: true }); // disabled by default
         await admin.save();
         res.status(201).json(`Admin ${name} created successfully`);
     } catch (err) {
@@ -22,21 +22,57 @@ const signup = async (req, res) => {
     }
 };
 
-// Login
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
         const admin = await Admin.findOne({ email });
-        if (admin && await bcrypt.compare(password, admin.password)) {
-            const token = jwt.sign({ id: admin._id, role: admin.role }, SECRET_KEY, { expiresIn: '1hr' });
-            res.status(200).json({ message: `Login successful for ${admin.name}`, token: token });  // Include token in response
+        if (admin) {
+            if (admin.disabled) {
+                return res.status(401).json('Admin account is disabled.');
+            }
+
+            const isPasswordValid = await bcrypt.compare(password, admin.password);
+            if (isPasswordValid) {
+                const token = jwt.sign({ id: admin._id, role: admin.role }, SECRET_KEY, { expiresIn: '1hr' });
+                res.status(200).json({ message: `Login successful for ${admin.name}`, token: token });
+            } else {
+                res.status(401).json('Invalid email or password');
+            }
         } else {
             res.status(401).json('Invalid email or password');
         }
     } catch (err) {
         res.status(500).json(err.message);
     }
-}
+};
+
+
+// Get pending admin requests
+const getPendingAdmins = async (req, res) => {
+    try {
+        const pendingAdmins = await Admin.find({ disabled: true });
+        res.status(200).json(pendingAdmins);
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+
+// Approve admin request
+const approveAdmin = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const admin = await Admin.findById(id);
+        if (admin) {
+            admin.disabled = false;
+            await admin.save();
+            res.status(200).json(`Admin ${admin.name} enabled successfully`);
+        } else {
+            res.status(404).json(`Admin not found`);
+        }
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
 
 
 // Logout
@@ -182,7 +218,7 @@ const addCourse = async (req, res) => {
             courseName,
             startDate: new Date(startDate),
             endDate: new Date(endDate),
-            assignedTeachers: []  // Initially no teachers assigned
+            assignedTeachers: []  
         });
         await course.save();
 
@@ -193,11 +229,26 @@ const addCourse = async (req, res) => {
 };
 
 
+const deleteCourse = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const course = await Course.findByIdAndDelete(id);
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found' });
+        }
+        res.status(200).json({ message: `Course ${course.courseName} deleted successfully` });
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+
+
 //assign teacher to course
 const assignCourse = async (req, res) => {
-    const { courseId, teacherIds } = req.body;
+    const { courseId } = req.params;
+    const { teacherIds } = req.body;
     try {
-        const course = await Course.findOne({ courseId });
+        const course = await Course.findById(courseId);
         if (!course) {
             return res.status(404).json({ message: "Course not found" });
         }
@@ -218,6 +269,7 @@ const assignCourse = async (req, res) => {
         res.status(500).json(err.message);
     }
 };
+
 
 
 //get all courses
@@ -264,4 +316,4 @@ const getEnrolledStudents = async (req, res) => {
 
 
 
-module.exports = { signup, login, logout, signupUser , signupTeacher, getUsers, getTeachers, disableUser, enableUser,disableTeacher,enableTeacher, addCourse, assignCourse, getCourses, getAssignedTeachers, getEnrolledStudents};
+module.exports = { signup, login,approveAdmin, getPendingAdmins, logout, signupUser , signupTeacher, getUsers, getTeachers, disableUser, enableUser,disableTeacher,enableTeacher, addCourse,deleteCourse, assignCourse, getCourses, getAssignedTeachers, getEnrolledStudents};

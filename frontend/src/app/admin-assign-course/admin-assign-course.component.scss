@@ -1,0 +1,103 @@
+.assign-course-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  
+    .modal-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+  
+      h2 {
+        margin: 0;
+        font-size: 1.5em;
+        color: #333;
+      }
+  
+      .close {
+        font-size: 1.5em;
+        cursor: pointer;
+        color: #999;
+        &:hover {
+          color: #333;
+        }
+      }
+    }
+  
+    .modal-body {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center the form content */
+  
+      p {
+        margin: 5px 0;
+        color: #666;
+      }
+  
+      form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center the form content */
+        margin-top: 20px; /* Add space between description and form */
+  
+        mat-form-field {
+          width: 100%;
+          margin-bottom: 20px;
+  
+          .teacher-dropdown {
+            .mat-select-trigger {
+              background-color: #f5f5f5; // Light grey background
+              color: #333; // Text color
+              border: 1px solid #ccc; // Border color for visibility
+              border-radius: 4px; // Rounded corners
+              height: 40px; // Adjusted height for dropdown
+            }
+  
+            .mat-select {
+              background-color: #f5f5f5; // Light grey background for the dropdown
+              color: #333; // Text color
+              border: 1px solid #ccc; // Border color for visibility
+              border-radius: 4px; // Rounded corners
+            }
+  
+            .mat-select-panel {
+              background-color: #fff; // White background for dropdown
+              color: #333; // Text color
+              max-height: 200px; // Adjust dropdown panel height
+            }
+          }
+        }
+  
+        button[type='submit'] {
+          background-color: #4CAF50; /* Green */
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 16px;
+          width: 100%; /* Set button width to 100% */
+          text-align: center; /* Center text */
+          margin-top: 20px; /* Add space between dropdown and button */
+        }
+  
+        button[type='submit']:disabled {
+          background-color: #cccccc;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+  

@@ -13,7 +13,7 @@ const AdminSchema = new Schema({
     },
     disabled: {
         type: Boolean,
-        default: false,
+        default: true,
     }
 });
 

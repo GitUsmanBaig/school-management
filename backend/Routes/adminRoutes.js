@@ -3,7 +3,9 @@ const router = express.Router();
 const {
     signup, login, logout, getUsers, getTeachers,
     disableUser, enableUser, signupUser, signupTeacher, 
-    addCourse,assignCourse, getCourses, disableTeacher, enableTeacher, getAssignedTeachers, getEnrolledStudents
+    addCourse,assignCourse, getCourses, disableTeacher, enableTeacher, getAssignedTeachers, getEnrolledStudents, deleteCourse,
+    getPendingAdmins,
+    approveAdmin
 } = require('../Controller/adminController');
 
 
@@ -21,10 +23,12 @@ router.patch('/teacher/enable/:id', authenticate_admin, enableTeacher);
 router.post('/user/add', authenticate_admin, signupUser);
 router.post('/teacher/add', authenticate_admin, signupTeacher);
 router.post('/course/add', authenticate_admin, addCourse);
-router.post('/course/assign',authenticate_admin, assignCourse);
+router.post('/course/delete/:id', authenticate_admin, deleteCourse);
+router.post('/course/assign/:courseId', authenticate_admin, assignCourse);
 router.get('/course/all', authenticate_admin, getCourses);
 router.get('/course/assign/:id', authenticate_admin, getAssignedTeachers);
 router.get('/course/enroll/:id', authenticate_admin, getEnrolledStudents);
-
+router.get('/pending', authenticate_admin, getPendingAdmins);
+router.patch('/approve/:id', authenticate_admin, approveAdmin);
 
 module.exports = router;

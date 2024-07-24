@@ -1,0 +1,32 @@
+<div *ngIf="isActive" class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <h2>Enrolled Students</h2>
+      <div *ngIf="students.length > 0; else noResultsTemplate">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>CNIC</th>
+              <th>Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of students">
+              <td>{{ student.name }}</td>
+              <td>{{ student.email }}</td>
+              <td>{{ student.CNIC }}</td>
+              <td>{{ student.contact }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noResultsTemplate>
+        <div class="no-results">
+          <p>No students found</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  

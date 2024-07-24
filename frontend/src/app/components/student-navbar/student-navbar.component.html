@@ -1,0 +1,9 @@
+<nav class="navbar">
+    <div class="nav-items">
+      <button class="settings-btn" (click)="toggleSettings()">Profile</button>
+      <button (click)="logout()" class="logout-btn">Logout</button>
+    </div>
+  </nav>
+  
+  <app-student-settings-modal [isActive]="isSettingsModalActive"></app-student-settings-modal>
+  

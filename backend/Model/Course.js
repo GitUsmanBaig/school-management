@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const attendanceSchema = new mongoose.Schema({
+    courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
+    studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    date: { type: String, required: true },
+    present: { type: Boolean, required: true },
+});
 
 const CourseSchema = new Schema({
     courseId: {
@@ -29,7 +35,8 @@ const CourseSchema = new Schema({
             ref: 'UserProfile'
         }],
         default: []
-    }
+    },
+     attendanceRecords: [attendanceSchema] 
 });
 
 const Course = mongoose.model('Course', CourseSchema);

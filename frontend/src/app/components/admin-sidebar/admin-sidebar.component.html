@@ -1,8 +1,12 @@
 <aside class="sidebar">
-    <ul>
-      <li><a routerLink="/admin-teacher">Teachers</a></li>
-      <li><a routerLink="/admin-student">Students</a></li>
-      <li><a routerLink="/admin-course">Courses</a></li>
-    </ul>
-  </aside>
-  
+  <ul>
+    <li><a routerLink="/admin-student">Students</a></li>
+    <li><a routerLink="/admin-teacher">Teachers</a></li>
+    <li><a routerLink="/admin-course">Courses</a></li>
+    <li>
+      <a routerLink="/admin-requests">
+        Requests <span class="badge" *ngIf="pendingRequestsCount > 0">{{ pendingRequestsCount }}</span>
+      </a>
+    </li>
+  </ul>
+</aside>

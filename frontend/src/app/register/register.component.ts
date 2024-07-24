@@ -30,7 +30,7 @@ export class RegisterComponent {
       (resultData: any) => {
         console.log(resultData);
         alert("Admin registered successfully");
-        this.router.navigate(['/']);  // Redirect after successful registration
+        this.router.navigate(['/login']);  // Redirect after successful registration
       },
       (error) => {
         console.error("There was an error!", error);
@@ -44,6 +44,6 @@ export class RegisterComponent {
   }
 
   goToLogin() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 }

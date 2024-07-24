@@ -1,0 +1,32 @@
+<div class="dashboard-container">
+  <app-teacher-navbar></app-teacher-navbar>
+  <app-teacher-sidebar></app-teacher-sidebar>
+  <main class="content">
+    <div class="controls">
+      <label for="course">Select Course:</label>
+      <select id="course" [(ngModel)]="selectedCourseId" (change)="fetchEnrolledStudents()">
+        <option *ngFor="let course of courses" [value]="course._id">{{ course.courseName }}</option>
+      </select>
+    </div>
+    <div *ngIf="students.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Quiz 1 Score</th>
+            <th>Quiz 2 Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of students">
+            <td>{{ student.name }}</td>
+            <td><input type="number" [(ngModel)]="student.quiz1"></td>
+            <td><input type="number" [(ngModel)]="student.quiz2"></td>
+          </tr>
+        </tbody>
+      </table>
+      <button (click)="addAllMarks()">Add All Marks</button>
+    </div>
+    <p *ngIf="students.length === 0 && selectedCourseId" class="no-results">No students enrolled in this course.</p>
+  </main>
+</div>

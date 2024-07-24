@@ -1,10 +1,49 @@
-
 <div class="dashboard-container">
-    <app-admin-navbar></app-admin-navbar>
-    <app-admin-sidebar></app-admin-sidebar>
-    <main class="content">
-      <p>This is the teacher management section.</p>
-      <img src="../../assets/3.jpg" alt="Teacher Image">
-    </main>
-  </div>
-  
+  <app-admin-navbar></app-admin-navbar>
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="content">
+    <div class="controls">
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search teachers..." (input)="filterTeachers()" class="search-bar">
+      <!-- Button triggers the modal display -->
+      <button class="add-button" (click)="showAddTeacherModal = true">Add Teacher</button>
+    </div>
+    <!-- Only display the table if there are teachers to show -->
+    <div class="teacher-list" *ngIf="filteredTeachers.length > 0; else noResultsTemplate">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Qualifications</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let teacher of filteredTeachers" [class.disabled]="!teacher.isEnabled">
+            <td>{{ teacher.name }}</td>
+            <td>{{ teacher.email }}</td>
+            <td>{{ teacher.qualifications.join(', ') }}</td>
+            <td>
+              <button (click)="enableTeacher(teacher)" [disabled]="teacher.isEnabled" class="btn-enable">Enable</button>
+              <button (click)="disableTeacher(teacher)" [disabled]="!teacher.isEnabled" class="btn-disable">Disable</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Modal for adding a teacher -->
+    <div *ngIf="showAddTeacherModal" class="modal">
+      <div class="modal-content">
+        <span class="close" (click)="showAddTeacherModal = false">&times;</span>
+        <app-admin-add-teacher #adminAddTeacher (teacherAdded)="onTeacherAdded()"></app-admin-add-teacher>
+      </div>
+    </div>
+  </main>
+  <!-- Template that displays when there are no search results -->
+  <ng-template #noResultsTemplate>
+    <div class="no-results">
+      <img src="../../assets/1.png" alt="No results found">
+      <p>No results found</p>
+    </div>
+  </ng-template>
+</div>

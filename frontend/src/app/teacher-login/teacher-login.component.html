@@ -1,0 +1,26 @@
+<div class="login-container">
+    <div class="login-form">
+      <h2>Welcome back, Teacher!</h2>
+      <form (ngSubmit)="login()">
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="Enter your email address" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <input type="password" id="password" [(ngModel)]="password" name="password" placeholder="Enter password" required>
+        </div>
+        <div class="form-actions">
+          <div class="checkbox">
+            <input type="checkbox" id="remember-me">
+            <label for="remember-me">Remember me</label>
+          </div>
+        </div>
+        <button type="submit">Log in</button>
+      </form>
+    </div>
+    <div class="login-image">
+      <img src="../../assets/Wavy_Tech-28_Single-10.jpg" alt="Decorative">
+    </div>
+  </div>
+  

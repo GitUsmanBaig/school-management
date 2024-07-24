@@ -1,0 +1,42 @@
+.sidebar {
+  background-color: #343a40;
+  color: #fff;
+  padding: 20px;
+  font-size: 16px;
+  height: 100vh;  // Ensures the sidebar spans the full height of the viewport
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin-bottom: 15px;
+
+      a {
+        color: #fff;
+        text-decoration: none;
+        padding: 10px;
+        display: block;
+        width: 100%;  // Ensures the link uses the full width of the sidebar
+        text-align: left;  // Ensures text is aligned to the left
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.3s ease;  // Smooth transitions for hover effects
+
+        &:hover {
+          background-color: #495057;
+          transform: scale(1.05);  // Gently scales up the link on hover
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    padding: 10px;
+    font-size: 14px;
+  }
+}

@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 
-// Load environment variables
 dotenv.config();
 
 if (!process.env.MONGODB_URL) {
@@ -21,11 +20,11 @@ const User = require('../Model/User');
 const Course = require('../Model/Course');
 const userRoutes = require('../Routes/userRoutes');
 
-// Middleware to set the user in req.user
 app.use((req, res, next) => {
-    if (req.cookies.auth_token) {
+    const token = req.headers['authorization'];
+    if (token) {
         try {
-            const decoded = jwt.verify(req.cookies.auth_token, process.env.SECRET_KEY);
+            const decoded = jwt.verify(token, process.env.SECRET_KEY);
             req.user = { id: decoded.id, role: decoded.role };
         } catch (err) {
             return res.status(401).json('Unauthorized');
@@ -34,7 +33,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// Use user routes
 app.use('/api/users', userRoutes);
 
 describe('User Controller', () => {
@@ -70,7 +68,7 @@ describe('User Controller', () => {
                 .send({ email: 'ali@example.com', password: 'password123' });
 
             expect(res.statusCode).toBe(200);
-            expect(JSON.parse(res.text)).toBe(`Login successful for ${user.name}`);
+            expect(res.body.message).toBe(`Login successful for ${user.name}`);
         });
 
         it('should not login a user with invalid credentials', async () => {
@@ -79,7 +77,7 @@ describe('User Controller', () => {
                 .send({ email: 'wrong@example.com', password: 'wrongpassword' });
 
             expect(res.statusCode).toBe(401);
-            expect(JSON.parse(res.text)).toBe('Invalid email or password');
+            expect(res.body).toBe('Invalid email or password');
         });
     });
 
@@ -89,7 +87,7 @@ describe('User Controller', () => {
                 .post('/api/users/logout');
 
             expect(res.statusCode).toBe(200);
-            expect(JSON.parse(res.text)).toBe('Logout successful');
+            expect(res.body).toBe('Logout successful');
         });
     });
 
@@ -107,7 +105,7 @@ describe('User Controller', () => {
 
             const res = await request(app)
                 .get('/api/users/courses/all')
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', token);
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toEqual(expect.arrayContaining([
@@ -130,7 +128,7 @@ describe('User Controller', () => {
 
             const res = await request(app)
                 .get(`/api/users/courses/${course._id}`)
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', token);
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toEqual(expect.objectContaining({ courseId: 'C1', courseName: 'Course 1' }));
@@ -162,10 +160,10 @@ describe('User Controller', () => {
 
             const res = await request(app)
                 .post(`/api/users/courses/enroll/${course._id}`)
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', token);
 
             expect(res.statusCode).toBe(200);
-            expect(JSON.parse(res.text)).toBe('Enrolled successfully');
+            expect(res.body).toBe('Enrolled successfully');
         });
     });
 
@@ -201,10 +199,10 @@ describe('User Controller', () => {
 
             const res = await request(app)
                 .delete(`/api/users/courses/unenroll/${course._id}`)
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', token);
 
             expect(res.statusCode).toBe(200);
-            expect(JSON.parse(res.text)).toBe('Unenrolled successfully');
+            expect(res.body).toBe('Unenrolled successfully');
         });
     });
 
@@ -236,7 +234,7 @@ describe('User Controller', () => {
 
             const res = await request(app)
                 .get('/api/users/courses/enroll/all')
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', token);
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toEqual(expect.arrayContaining([

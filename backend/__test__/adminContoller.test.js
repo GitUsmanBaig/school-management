@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
-const cookieParser = require('cookie-parser');
 
 dotenv.config();
 
@@ -13,7 +12,6 @@ if (!process.env.MONGODB_URL) {
 }
 
 const app = express();
-app.use(cookieParser());
 app.use(express.json());
 
 const Admin = require('../Model/Admin');
@@ -22,10 +20,13 @@ const Teacher = require('../Model/Teacher');
 const Course = require('../Model/Course');
 const adminRoutes = require('../Routes/adminRoutes');
 
+// Middleware to simulate local storage token verification
 app.use((req, res, next) => {
-    if (req.cookies.auth_token) {
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+        const token = authHeader.split(' ')[1]; // Bearer TOKEN
         try {
-            const decoded = jwt.verify(req.cookies.auth_token, process.env.SECRET_KEY);
+            const decoded = jwt.verify(token, process.env.SECRET_KEY);
             req.user = { id: decoded.id, role: decoded.role };
         } catch (err) {
             return res.status(401).json('Unauthorized');
@@ -128,7 +129,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .post('/api/admin/user/add')
-                .set('Cookie', `auth_token=${token}`)
+                .set('Authorization', `Bearer ${token}`)
                 .send(userData);
 
             expect(res.statusCode).toBe(201);
@@ -152,7 +153,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .post('/api/admin/teacher/add')
-                .set('Cookie', `auth_token=${token}`)
+                .set('Authorization', `Bearer ${token}`)
                 .send(teacherData);
 
             expect(res.statusCode).toBe(201);
@@ -176,7 +177,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .get('/api/admin/user/all')
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toEqual(expect.arrayContaining([
@@ -203,7 +204,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .get('/api/admin/teacher/all')
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toEqual(expect.arrayContaining([
@@ -228,7 +229,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .patch(`/api/admin/user/disable/${user._id}`)
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(res.statusCode).toBe(200);
             expect(JSON.parse(res.text)).toBe(`User ${user.name} disabled successfully`);
@@ -251,7 +252,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .patch(`/api/admin/user/enable/${user._id}`)
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(res.statusCode).toBe(200);
             expect(JSON.parse(res.text)).toBe(`User ${user.name} enabled successfully`);
@@ -276,7 +277,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .patch(`/api/admin/teacher/disable/${teacher._id}`)
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(res.statusCode).toBe(200);
             expect(JSON.parse(res.text)).toBe(`Teacher ${teacher.name} disabled successfully`);
@@ -301,7 +302,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .patch(`/api/admin/teacher/enable/${teacher._id}`)
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(res.statusCode).toBe(200);
             expect(JSON.parse(res.text)).toBe(`Teacher ${teacher.name} enabled successfully`);
@@ -321,7 +322,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .post('/api/admin/course/add')
-                .set('Cookie', `auth_token=${token}`)
+                .set('Authorization', `Bearer ${token}`)
                 .send(courseData);
 
             expect(res.statusCode).toBe(201);
@@ -368,7 +369,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .post('/api/admin/course/assign')
-                .set('Cookie', `auth_token=${token}`)
+                .set('Authorization', `Bearer ${token}`)
                 .send({ courseId: 'C1', teacherIds: [teacher1._id, teacher2._id] });
 
             expect(res.statusCode).toBe(200);
@@ -390,7 +391,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .get('/api/admin/course/all')
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toEqual(expect.arrayContaining([
@@ -438,7 +439,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .get(`/api/admin/course/assign/${course._id}`)
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toEqual(expect.arrayContaining([
@@ -473,7 +474,7 @@ describe('Admin Controller', () => {
 
             const res = await request(app)
                 .get(`/api/admin/course/enroll/${course._id}`)
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', `Bearer ${token}`);
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toEqual(expect.arrayContaining([

@@ -22,9 +22,10 @@ const User = require('../Model/User');
 const teacherRoutes = require('../Routes/teacherRoutes');
 
 app.use((req, res, next) => {
-    if (req.cookies.auth_token) {
+    const token = req.headers['authorization'];
+    if (token) {
         try {
-            const decoded = jwt.verify(req.cookies.auth_token, process.env.SECRET_KEY);
+            const decoded = jwt.verify(token, process.env.SECRET_KEY);
             req.user = { id: decoded.id, role: decoded.role };
         } catch (err) {
             return res.status(401).json('Unauthorized');
@@ -69,7 +70,7 @@ describe('Teacher Controller', () => {
                 .send({ email: 'teacher@example.com', password: 'password123' });
 
             expect(res.statusCode).toBe(200);
-            expect(res.body).toBe(`Login successful for ${teacher.name}`);
+            expect(res.body.message).toBe(`Login successful for ${teacher.name}`);
         });
 
         it('should not login a teacher with invalid credentials', async () => {
@@ -98,7 +99,7 @@ describe('Teacher Controller', () => {
                 .send({ email: 'teacher@example.com', password: 'password123' });
 
             expect(res.statusCode).toBe(401);
-            expect(res.body).toBe('teacher is disabled');
+            expect(res.body).toBe('Teacher is disabled');
         });
     });
 
@@ -141,7 +142,7 @@ describe('Teacher Controller', () => {
 
             const res = await request(app)
                 .get('/api/teachers/courses/all')
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', token);
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toEqual(expect.arrayContaining([
@@ -193,7 +194,7 @@ describe('Teacher Controller', () => {
 
             const res = await request(app)
                 .get(`/api/teachers/students/all/${course._id}`)
-                .set('Cookie', `auth_token=${token}`);
+                .set('Authorization', token);
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toEqual(expect.arrayContaining([

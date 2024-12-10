@@ -8,7 +8,6 @@ require ('dotenv').config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
-// Login   
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
